@@ -81,8 +81,7 @@ class clsListagem extends clsCampos
   var $funcAcao = '';
   var $funcAcaoNome = '';
   var $rotulo_anterior;
-  var $locale = "<b>=> PAGINA SEM LOCALIZACAO, COLOQUE POR GENTILEZA. <=</b>";
-
+  var $locale = "";
   var $array_botao;
   var $array_botao_url;
   var $array_botao_script;
@@ -123,7 +122,7 @@ class clsListagem extends clsCampos
 
     $this->bannerClose = $boolFechaBanner;
   }
-  
+
   function enviaLocalizacao($localizao){
       if($localizao)
         $this->locale = $localizao;
@@ -259,7 +258,7 @@ class clsListagem extends clsCampos
       'pos_atual', -1, TRUE);
 
     return NULL;
-  } 
+  }
 
   function RenderHTML()
   {
@@ -305,14 +304,14 @@ class clsListagem extends clsCampos
       else {
         $tipo = 'cad';
       }
-      
+
       $server = $_SERVER['SERVER_NAME'];
       $endereco = $_SERVER ['REQUEST_URI'];
       $enderecoPagina = $_SERVER['PHP_SELF'];
-      
+
       //$barra = '<b>Localizacao: http://'.$server.$endereco.'</b><br>';
       //$barra = '<tr><td><b>Localizacao:'. $enderecoPagina .'</b><br></tr></td>';
-      $barra = '<b>Filtros de busca</b>';  
+      $barra = '<b>Filtros de busca</b>';
 
       if (class_exists('clsPmiajudaPagina')) {
         $ajudaPagina = new clsPmiajudaPagina();
@@ -397,12 +396,12 @@ class clsListagem extends clsCampos
 
         $retorno .=  "
           <table class='tablelistagem' $width border='0' cellpadding='2' cellspacing='1'>";
-        
+
         $retorno .=  "
             <tr>
               <td class='fundoLocalizacao' colspan='2' height='24'>{$this->locale}</td>
             </tr>";
-              
+
         $retorno .=  "
             <tr>
               <td class='formdktd' colspan='2' height='24'>{$barra}</td>
