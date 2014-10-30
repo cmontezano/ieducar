@@ -1,20 +1,25 @@
 <?php
   require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/bootstrap.php';
   $entityName = $GLOBALS['coreExt']['Config']->app->entity->name;
+  $logoFileName = $GLOBALS['coreExt']['Config']->report->logo_file_name;
+  $logoUrl = '/modules/Reports/ReportLogos/' . $logoFileName;
 ?>
 
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel=stylesheet type='text/css' href='styles/reset.css' />
-    <link rel=stylesheet type='text/css' href='styles/portabilis.css' />
+    <link rel=stylesheet type='text/css' href='styles/header.css' />
+    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
   </head>
 
   <body>
-    <div id="cabecalho" class="texto-normal">
-      <div id="ccorpo">
-        <p><a id="logo" href="/">i-Educar</a> <span id="status"><span id="entidade"><?php echo $entityName; ?></span></span></p>
-      </div>
+    <div class="header">
+        <a class="logo" href="/">iEducar</a>
+        <span class="entity">
+          <img src="<?php echo $logoUrl; ?>" alt="brasao" />
+          <?php echo $entityName; ?>
+        </span>
     </div>
   </body>
 </html>
