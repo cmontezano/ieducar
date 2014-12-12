@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="diploma" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b58c92c8-60b6-4afb-ae40-52aa24303ab2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ano" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new java.lang.Integer(0)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="instituicao" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new java.lang.Integer(0)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="escola" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new java.lang.Integer(0)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="matricula" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new java.lang.Integer(0)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="logo" class="java.lang.String"/>
+	<parameter name="data_conclusao" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/Users/lucasdavila/projects/ieducar/ieducativa/comunidade/ieducar/modules/Reports/ReportSources/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT instituicao.nm_instituicao AS nm_instituicao,
+       instituicao.nm_responsavel AS nm_responsavel,
+       (SELECT curso.nm_curso
+        FROM pmieducar.curso WHERE  curso.cod_curso = matricula.ref_cod_curso) as nm_curso,
+       (SELECT serie.nm_serie FROM pmieducar.serie
+        WHERE serie.cod_serie = matricula.ref_ref_cod_serie) as nm_serie,
+
+       (SELECT turma.nm_turma FROM pmieducar.turma, pmieducar.matricula_turma
+        WHERE turma.cod_turma = matricula_turma.ref_cod_turma and
+        matricula_turma.ref_cod_matricula = matricula.cod_matricula) as nm_turma,
+        matricula.cod_matricula as cod_matricula,
+
+        fcn_upper(pessoa.nome) as nome,
+        to_char(fisica.data_nasc,'dd/mm/yyyy') as data_nasc,
+
+      (SELECT municipio.nome || ' - ' || sigla_uf FROM public.municipio
+        WHERE municipio.idmun = fisica.idmun_nascimento) as municipio_uf_nascimento,
+
+    (SELECT to_char(data_cadastro,'dd/mm/yyyy')
+     FROM pmieducar.matricula mt
+     WHERE mt.cod_matricula = matricula.cod_matricula AND
+     mt.ativo = 1 AND
+     mt.ultima_matricula = 1) as dt_matricula, matricula.ano as matricula_ano,
+
+       fcn_upper(instituicao.cidade) as cidade,
+
+      (SELECT COALESCE((SELECT COALESCE (fcn_upper(ps.nome),fcn_upper(juridica.fantasia))
+          FROM cadastro.pessoa ps,
+               cadastro.juridica
+         WHERE escola.ref_idpes = juridica.idpes AND
+               juridica.idpes = ps.idpes AND
+         ps.idpes = escola.ref_idpes),(SELECT nm_escola FROM pmieducar.escola_complemento where ref_cod_escola = escola.cod_escola))) AS nm_escola,
+
+      (SELECT COALESCE((SELECT COALESCE ((SELECT municipio.nome
+         FROM public.municipio,
+              cadastro.endereco_pessoa,
+              cadastro.juridica,
+              public.bairro
+        WHERE endereco_pessoa.idbai = bairro.idbai AND
+              bairro.idmun = municipio.idmun AND
+              juridica.idpes = endereco_pessoa.idpes AND
+              juridica.idpes = escola.ref_idpes), (SELECT endereco_externo.cidade FROM cadastro.endereco_externo WHERE endereco_externo.idpes = escola.ref_idpes))),(SELECT municipio FROM pmieducar.escola_complemento where ref_cod_escola = escola.cod_escola))) AS municipio,
+
+      (SELECT COALESCE((SELECT COALESCE((SELECT municipio.sigla_uf
+         FROM public.municipio,
+              cadastro.endereco_pessoa,
+              cadastro.juridica,
+              public.bairro
+        WHERE endereco_pessoa.idbai = bairro.idbai AND
+              bairro.idmun = municipio.idmun AND
+              juridica.idpes = endereco_pessoa.idpes AND
+              juridica.idpes = escola.ref_idpes),(SELECT endereco_externo.sigla_uf FROM cadastro.endereco_externo WHERE endereco_externo.idpes = escola.ref_idpes))),(select inst.ref_sigla_uf from pmieducar.instituicao inst where inst.cod_instituicao = instituicao.cod_instituicao))) AS uf_municipio,
+
+       to_char(current_date,'dd/mm/yyyy') AS data_atual,
+       to_char(current_timestamp, 'HH24:MI:SS') AS hora_atual,
+
+  documento.rg
+
+  FROM pmieducar.aluno,
+       pmieducar.matricula,
+       cadastro.fisica,
+       cadastro.pessoa,
+       pmieducar.instituicao,
+       pmieducar.escola,
+       pmieducar.escola_ano_letivo,
+       cadastro.documento
+
+ WHERE escola_ano_letivo.ano = $P{ano} AND
+      instituicao.cod_instituicao = $P{instituicao} AND
+      escola.cod_escola = $P{escola} AND
+      matricula.cod_matricula = (SELECT MAX(cod_matricula)
+        from pmieducar.matricula mt, pmieducar.aluno al
+        where mt.ref_cod_aluno = matricula.ref_cod_aluno AND
+        matricula.cod_matricula = $P{matricula}  AND
+        mt.ano = matricula.ano AND
+        mt.ref_ref_cod_escola = matricula.ref_ref_cod_escola AND
+        mt.ref_ref_cod_serie = matricula.ref_ref_cod_serie AND
+        mt.ativo  = 1 AND
+        mt.ultima_matricula = 1) AND
+      pessoa.idpes = fisica.idpes AND
+      fisica.idpes = aluno.ref_idpes AND
+      aluno.cod_aluno = matricula.ref_cod_aluno AND
+      matricula.ref_cod_aluno = aluno.cod_aluno AND
+      escola.ref_cod_instituicao = instituicao.cod_instituicao AND
+      escola_ano_letivo.ref_cod_escola = escola.cod_escola AND
+      matricula.ano = escola_ano_letivo.ano AND
+      matricula.ativo  = 1 AND
+      escola.ativo = 1 AND
+      instituicao.ativo = 1 AND
+      documento.idpes = fisica.idpes]]>
+	</queryString>
+	<field name="nm_instituicao" class="java.lang.String"/>
+	<field name="nm_responsavel" class="java.lang.String"/>
+	<field name="nm_curso" class="java.lang.String"/>
+	<field name="nm_serie" class="java.lang.String"/>
+	<field name="nm_turma" class="java.lang.String"/>
+	<field name="cod_matricula" class="java.lang.Integer"/>
+	<field name="nome" class="java.lang.String"/>
+	<field name="data_nasc" class="java.lang.String"/>
+	<field name="municipio_uf_nascimento" class="java.lang.String"/>
+	<field name="dt_matricula" class="java.lang.String"/>
+	<field name="matricula_ano" class="java.lang.Integer"/>
+	<field name="cidade" class="java.lang.String"/>
+	<field name="nm_escola" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="uf_municipio" class="java.lang.String"/>
+	<field name="data_atual" class="java.lang.String"/>
+	<field name="hora_atual" class="java.lang.String"/>
+	<field name="rg" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<detail>
+		<band height="555" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="108" width="608" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Eu, "+$F{nm_responsavel}+","]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="125" width="608" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Reitor da "+$F{nm_instituicao}+","]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="142" width="608" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["no uso das minhas atribuições e tendo em vista a conclusão do  curso "+$F{nm_curso}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="159" width="608" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["em "+$P{data_conclusao}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="176" width="608" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="7c6b65ab-b713-433d-8dcf-079a43c5882e" x="194" y="463" width="208" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="244" width="608" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[Reitoria da NOME INSTITUICAO, DATA EMISSAO.]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement uuid="58181b73-1bed-48c6-8004-978d09fbabef" x="15" y="25" width="168" height="168"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="227" width="608" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[E outorgo-lhe o presente diploma, a fim de que possa gozar de todos os direitos e prerrogativas legais.]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="210" width="608" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[nascido em DATA NASCIMENTO, de nacionalidade NACIONALIDADE.]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="193" width="608" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{rg}+", ORGAO EMISSOR, natural de NATURALIDADE,"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="465" width="208" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nm_responsavel}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="594" y="463" width="208" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[NOME DIRETOR]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="7c6b65ab-b713-433d-8dcf-079a43c5882e" x="594" y="461" width="208" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="402" y="526" width="192" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[Diplomado]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="7c6b65ab-b713-433d-8dcf-079a43c5882e" x="402" y="524" width="192" height="1"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="22" width="608" height="32"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="26" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nm_instituicao}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="c803f32c-11d3-438d-af5f-7290785734f9" x="194" y="55" width="608" height="22"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans" size="16" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nm_escola}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
