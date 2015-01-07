@@ -28,8 +28,8 @@
   <script type="text/javascript" src="scripts/ied/forms.js?1"></script>
   <script type="text/javascript" src="scripts/ied/phpjs.js?1"></script>
 
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/prototype/1.7.1.0/prototype.js"></script>
-  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/scriptaculous/1.9.0/scriptaculous.js?load=effects"></script>
+  <script type="text/javascript" src="<!-- #&PROTOTYPE_SRC&# -->"></script>
+  <script type="text/javascript" src="<!-- #&SCRIPTACULOUS_SRC&# -->"></script>
 
   <script type="text/javascript">
     var running = false;

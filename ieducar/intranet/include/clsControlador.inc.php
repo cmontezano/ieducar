@@ -26,6 +26,7 @@ require_once 'Portabilis/Messenger.php';
 require_once 'Portabilis/Mailer.php';
 require_once 'Portabilis/Utils/User.php';
 require_once 'Portabilis/Utils/ReCaptcha.php';
+require_once 'Ieducativa/StaticFiles/Javascript/Jquery.php';
 
 /**
  * clsControlador class.
@@ -223,6 +224,8 @@ class clsControlador
 
     if ($requiresHumanAccessValidation)
       $templateText = str_replace( "<!-- #&RECAPTCHA&# -->", Portabilis_Utils_ReCaptcha::getWidget(), $templateText);
+
+    $templateText = str_replace("<!-- #&JQUERY_SRC&# -->", Ieducativa_StaticFiles_Javascript_Jquery::path(), $templateText);
 
     fclose($templateFile);
     die($templateText);

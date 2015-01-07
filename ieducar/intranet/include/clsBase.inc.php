@@ -53,7 +53,8 @@ require_once 'include/funcoes.inc.php';
 require_once 'Portabilis/Utils/Database.php';
 require_once 'Portabilis/Utils/User.php';
 require_once 'Portabilis/String/Utils.php';
-
+require_once 'Ieducativa/StaticFiles/Javascript/Prototype.php';
+require_once 'Ieducativa/StaticFiles/Javascript/Scriptaculous.php';
 require_once 'modules/Error/Mailers/NotificationMailer.php';
 
 /**
@@ -148,6 +149,9 @@ class clsBase extends clsConfig
     else {
       $saida = str_replace("<!-- #&SCRIPT_HEADER&# -->", "", $saida);
     }
+
+    $saida = str_replace("<!-- #&PROTOTYPE_SRC&# -->", Ieducativa_StaticFiles_Javascript_Prototype::path(), $saida);
+    $saida = str_replace("<!-- #&SCRIPTACULOUS_SRC&# -->", Ieducativa_StaticFiles_Javascript_Scriptaculous::path(), $saida);
 
     return $saida;
   }

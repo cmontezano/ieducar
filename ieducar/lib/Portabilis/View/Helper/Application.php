@@ -33,6 +33,9 @@
 
 require_once 'CoreExt/View/Helper/Abstract.php';
 require_once 'Portabilis/Assets/Version.php';
+require_once 'Ieducativa/StaticFiles/Javascript/Jquery.php';
+require_once 'Ieducativa/StaticFiles/Javascript/JqueryUi.php';
+require_once 'Ieducativa/StaticFiles/Stylesheet/JqueryUi.php';
 
 /**
  * ApplicationHelper class.
@@ -164,7 +167,7 @@ class Portabilis_View_Helper_Application extends CoreExt_View_Helper_Abstract {
   // load lib helpers
 
   public static function loadJQueryLib($viewInstance) {
-    self::loadJavascript($viewInstance, '//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js', false);
+    self::loadJavascript($viewInstance, Ieducativa_StaticFiles_Javascript_Jquery::path(), false);
     self::embedJavascript($viewInstance, "if (typeof(\$j) == 'undefined') { var \$j = jQuery.noConflict(); }");
   }
 
@@ -175,8 +178,8 @@ class Portabilis_View_Helper_Application extends CoreExt_View_Helper_Abstract {
 
 
   public static function loadJQueryUiLib($viewInstance) {
-    self::loadJavascript($viewInstance, '//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js', false);
-    self::loadStylesheet($viewInstance, '//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/ui-lightness/jquery-ui.css', false);
+    self::loadJavascript($viewInstance, Ieducativa_StaticFiles_Javascript_JqueryUi::path(), false);
+    self::loadStylesheet($viewInstance, Ieducativa_StaticFiles_Stylesheet_JqueryUi::path(), false);
 
     // ui-autocomplete fixup
     self::embedStylesheet($viewInstance, ".ui-autocomplete { font-size: 11px; }");
