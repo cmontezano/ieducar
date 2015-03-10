@@ -63,6 +63,9 @@ class clsPmieducarTurma
   var $ref_ref_cod_escola_mult;
   var $visivel;
   var $data_fechamento;
+  var $tipo_boletim;
+  var $ano;
+
 	// propriedades padrao
 
 	/**
@@ -127,8 +130,13 @@ class clsPmieducarTurma
 	 *
 	 * @return object
 	 */
-	function clsPmieducarTurma( $cod_turma = null, $ref_usuario_exc = null, $ref_usuario_cad = null, $ref_ref_cod_serie = null, $ref_ref_cod_escola = null, $ref_cod_infra_predio_comodo = null, $nm_turma = null, $sgl_turma = null, $max_aluno = null, $multiseriada = null, $data_cadastro = null, $data_exclusao = null, $ativo = null, $ref_cod_turma_tipo = null, $hora_inicial = null, $hora_final = null, $hora_inicio_intervalo = null, $hora_fim_intervalo = null, $ref_cod_regente = null, $ref_cod_instituicao_regente = null, $ref_cod_instituicao = null, $ref_cod_curso = null, $ref_ref_cod_serie_mult = null, $ref_ref_cod_escola_mult = null, $visivel = null, $turma_turno_id = null, $tipo_boletim = null, $ano = null, $data_fechamento = NULL)
- 	{
+	function clsPmieducarTurma( $cod_turma = null, $ref_usuario_exc = null, $ref_usuario_cad = null, $ref_ref_cod_serie = null,
+	        $ref_ref_cod_escola = null, $ref_cod_infra_predio_comodo = null, $nm_turma = null, $sgl_turma = null, $max_aluno = null,
+	        $multiseriada = null, $data_cadastro = null, $data_exclusao = null, $ativo = null, $ref_cod_turma_tipo = null,
+	        $hora_inicial = null, $hora_final = null, $hora_inicio_intervalo = null, $hora_fim_intervalo = null, $ref_cod_regente = null,
+	        $ref_cod_instituicao_regente = null, $ref_cod_instituicao = null, $ref_cod_curso = null, $ref_ref_cod_serie_mult = null,
+	        $ref_ref_cod_escola_mult = null, $visivel = null, $turma_turno_id = null, $tipo_boletim = null, $ano = null, $data_fechamento = NULL)
+	{
 		$db = new clsBanco();
 		$this->_schema = "pmieducar.";
 		$this->_tabela = "{$this->_schema}turma";
@@ -283,7 +291,7 @@ class clsPmieducarTurma
 		{
 			if( class_exists( "clsPmieducarServidor" ) )
 			{
-				$tmp_obj = new clsPmieducarServidor($ref_cod_regente,null,null,null,null,null,null,null,$ref_cod_instituicao_regente);
+				$tmp_obj = new clsPmieducarServidor($ref_cod_regente,null,null,null,null,null,null,$ref_cod_instituicao_regente,null);
 				if( method_exists( $tmp_obj, "existe") )
 				{
 					if( $tmp_obj->existe() )
@@ -467,7 +475,11 @@ class clsPmieducarTurma
 	 */
 	function cadastra()
 	{
-		if( is_numeric( $this->ref_usuario_cad ) /*&& is_numeric( $this->ref_ref_cod_serie ) && is_numeric( $this->ref_ref_cod_escola ) && is_numeric( $this->ref_cod_infra_predio_comodo )*/ && is_string( $this->nm_turma ) && is_numeric( $this->max_aluno ) && is_numeric( $this->multiseriada ) && is_numeric( $this->ref_cod_turma_tipo ) )
+		if( is_numeric( $this->ref_usuario_cad )
+		        && is_string( $this->nm_turma )
+		        && is_numeric( $this->max_aluno )
+		        && is_numeric( $this->ref_cod_turma_tipo )
+        )
 		{
 			$db = new clsBanco();
 
@@ -622,9 +634,10 @@ class clsPmieducarTurma
 				$campos  .= "{$gruda}data_fechamento";
 				$valores .= "{$gruda}'{$this->data_fechamento}'";
 				$gruda    = ", ";
-			}				
+			}
 
 			$db->Consulta( "INSERT INTO {$this->_tabela} ( $campos ) VALUES( $valores )" );
+
 			return $db->InsertId( "{$this->_tabela}_cod_turma_seq");
 		}
 		return false;
@@ -816,7 +829,7 @@ class clsPmieducarTurma
 			else {
 				$set  .= "{$gruda}data_fechamento = NULL";
 				$gruda = ", ";
-			}			
+			}
 
 			if( $set )
 			{
@@ -1956,7 +1969,7 @@ and  e.cod_escola = t.ref_ref_cod_escola
 			return $resultado;
 		}
 		return false;
-	}	
+	}
 
 	/**
 	 * Retorna um array com os dados de um registro
@@ -2018,6 +2031,40 @@ and  e.cod_escola = t.ref_ref_cod_escola
 	}
 
 	/**
+	 * Se a turma estiver cadastrada pelo Educacenso, retorna o cod_turma.
+	 * @param $cod_inep int
+	 * @return int se houver, null se não.
+	 */
+	public static function id_turma_inep ($cod_inep) {
+	    $db = new clsBanco();
+	    $db->Consulta("SELECT cod_turma FROM modules.educacenso_cod_turma WHERE cod_turma_inep = {$cod_inep}");
+	    $db->ProximoRegistro();
+	    $row = $db->Tupla();
+	    if ($row)
+	        return $row['cod_turma'];
+	    else
+	        return null;
+
+	}
+
+	/**
+	 * Adiciona vínculo do INEP.
+	 * @param $cod_inep int
+	 * @param fonte str
+	 * @return true se executar, false se não
+	 */
+	public function vincula_educacenso ($cod_inep, $fonte = '') {
+	    if (!clsPmieducarTurma::id_turma_inep($cod_inep)) {
+	        $db = new clsBanco();
+	        $db->Consulta(sprintf("INSERT INTO modules.educacenso_cod_turma " .
+                  "(cod_turma, cod_turma_inep, fonte, created_at) VALUES " .
+                  "(%d, %d, '%s', NOW());", $this->cod_turma, $cod_inep, $fonte));
+	        return true;
+	    }
+	    return false;
+	}
+
+	/**
 	 * Define quais campos da tabela serao selecionados na invocacao do metodo lista
 	 *
 	 * @return null
@@ -2042,10 +2089,11 @@ and  e.cod_escola = t.ref_ref_cod_escola
 	 *
 	 * @return null
 	 */
-	function setLimite( $intLimiteQtd, $intLimiteOffset = null )
+	function setLimite( $intLimiteQtd, $intLimiteOffset = 0 )
 	{
 		$this->_limite_quantidade = $intLimiteQtd;
-		$this->_limite_offset = $intLimiteOffset;
+		if ($intLimiteOffset > 0)
+			$this->_limite_offset = $intLimiteOffset;
 	}
 
 	/**
