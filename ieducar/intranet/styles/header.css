@@ -1,12 +1,12 @@
 html, body {
-  font-family: 'Source Sans Pro',sans-serif;
-  font-size: 14.5px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
 }
 
 .header {
   line-height: 40px;
   padding: 0 20px;
-  background-color: #2980b9;
+  background-color: #3498db;
   color: #fff;
 }
 
@@ -14,11 +14,12 @@ html, body {
   text-decoration: none;
   font-weight: bold;
   color: #fff;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 .header .entity {
   float: right;
+  font-size: 13px;
 }
 
 .header .entity img {

@@ -1,16 +1,19 @@
 <?php
   require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/bootstrap.php';
   $entityName = $GLOBALS['coreExt']['Config']->app->entity->name;
-  $logoFileName = $GLOBALS['coreExt']['Config']->report->logo_file_name;
-  $logoUrl = '/modules/Reports/ReportLogos/' . $logoFileName;
+  $logoUrl = $GLOBALS['coreExt']['Config']->modules->app_report->logo_url;
+
+  if (! $logoUrl) {
+    $logoUrl = '/modules/Reports/ReportLogos/' . $GLOBALS['coreExt']['Config']->report->logo_file_name;
+  }
 ?>
 
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel=stylesheet type='text/css' href='styles/reset.css' />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel=stylesheet type='text/css' href='styles/header.css' />
-    <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro' rel='stylesheet' type='text/css'>
   </head>
 
   <body>

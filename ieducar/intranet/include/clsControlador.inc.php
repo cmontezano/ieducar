@@ -217,6 +217,7 @@ class clsControlador
     $templateFile = fopen($templateName, "r");
     $templateText = fread($templateFile, filesize($templateName));
     $templateText = str_replace( "<!-- #&ERROLOGIN&# -->", $this->messenger->toHtml('p'), $templateText);
+    $templateText = $this->replaceLoginTemplateText($templateText);
 
     $requiresHumanAccessValidation = isset($_SESSION['tentativas_login_falhas']) &&
                                      is_numeric($_SESSION['tentativas_login_falhas']) &&
@@ -231,6 +232,34 @@ class clsControlador
     die($templateText);
   }
 
+  protected function replaceLoginTemplateText($templateText) {
+    $templateText = str_replace( "%PARTNER_LOGO_URL%", $this->partnerLogoUrl(), $templateText);
+    $templateText = str_replace( "%PARTNER_URL%", $this->partnerUrl(), $templateText);
+    $templateText = str_replace( "%PARTNER_URL_TARGET%", $this->partnerUrlTarget(), $templateText);
+    $templateText = str_replace( "%PARTNER_DISPLAY_CLASS%", $this->partnerDisplayCssClass(), $templateText);
+
+    return $templateText;
+  }
+
+  protected function partnerUrl() {
+    if (! isset($this->_partnerUrl)) { $this->_partnerUrl = $GLOBALS['coreExt']['Config']->partner->url; }
+
+    return $this->_partnerUrl;
+  }
+
+  protected function partnerLogoUrl() {
+    if (! isset($this->_partnerLogoUrl)) { $this->_partnerLogoUrl = $GLOBALS['coreExt']['Config']->partner->logo_url; }
+
+    return $this->_partnerLogoUrl;
+  }
+
+  protected function partnerDisplayCssClass() {
+    return $this->partnerLogoUrl() ? '' : 'hidden';
+  }
+
+  protected function partnerUrlTarget() {
+    return $this->partnerUrl() ? '_blank' : '_self';
+  }
 
   protected function destroyLoginSession($addMsg = false) {
     $tentativasLoginFalhas = $_SESSION['tentativas_login_falhas'];
