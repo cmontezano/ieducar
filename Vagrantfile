@@ -19,5 +19,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/home/vagrant/ieducar"
 
   #public ip
-  config.vm.network "public_network", ip: "192.168.1.17"
+  config.vm.network "public_network", ip: "192.168.0.17"
 end

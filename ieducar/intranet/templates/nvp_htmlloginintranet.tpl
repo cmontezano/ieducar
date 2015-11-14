@@ -121,10 +121,6 @@
         </form>
       </div> <!-- end login-form -->
 
-      <div class="external links">
-        <a class="teacher module" href="#" target="_blank">Acesso do professor</a>
-      </div>
-
       <!-- <div id="service-info">
         <p class="requiriments title">Requisitos</p>
         <p class="explanation">Para melhor uso do sistema, recomendamos:</p>
