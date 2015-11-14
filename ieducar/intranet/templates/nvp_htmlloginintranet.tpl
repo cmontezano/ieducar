@@ -71,7 +71,6 @@
           <div class="title invisible %PARTNER_DISPLAY_CLASS%">Uma parceria:</div>
 
           <div class="logos">
-            <a href="http://ieducativa.com.br" alt="link para site da ieducativa" target="_blank"><img class="logo" src="https://ieducativa.s3.amazonaws.com/cdn/logos/ieducativa-300.png"/></a>
             <span class="and invisible %PARTNER_DISPLAY_CLASS%">&amp;</span>
             <a class="%PARTNER_DISPLAY_CLASS%" href="%PARTNER_URL%" alt="link para site do parceiro" target="%PARTNER_URL_TARGET%"><img class="partner logo" src="%PARTNER_LOGO_URL%"/></a>
           </div>
