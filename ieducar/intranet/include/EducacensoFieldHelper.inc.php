@@ -754,18 +754,19 @@ class EducacensoFieldHelper
 
      public static function row_type($row)
      {
-          return self::$rows [$row ['tipo_registro']];
+          return self::$rows[$row['tipo_registro']];
      }
 
      public static function parse_row($row)
      {
-          if (! array_key_exists ( $row [0], self::$fields )) {
-               throw new CoreExt_Exception_InvalidArgumentException ( "Não sei o que fazer com linhas de código " . $row [0] );
+          if (!array_key_exists($row[0], self::$fields)) {
+               throw new CoreExt_Exception_InvalidArgumentException("Não sei o que fazer com linhas de código " . $row [0]);
           }
     
           $result = array ();
-          foreach ( self::$fields [$row [0]] as $pos => $name ) {
-               $result [$name] = $row [$pos - 1];
+          
+          foreach (self::$fields[$row[0]] as $pos => $name) {
+               $result[$name] = $row[$pos - 1];
           }
 
           return $result;
