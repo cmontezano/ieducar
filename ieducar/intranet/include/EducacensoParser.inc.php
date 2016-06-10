@@ -33,21 +33,21 @@ class EducacensoParser {
     	$logs = array ();
     	$contents = file_get_contents ( $this->filename );
     	$contents = explode ( "\n", $contents );
-    
+
     	foreach ( $contents as $text_row ) {
     		if ($text_row) { // A última linha do arquivo é vazia.
     			$data = EducacensoFieldHelper::parse_row( explode ( "|", $text_row ) );
-    			try {
-        			$log = $this->parse_row($data);
-        			if ($log) {
-        				$logs[] = $log;
-        			}
-    			} catch (Exception $e) {
-    			    $logs[] = "Erro ao processar linha:";
-    			    $logs[] = print_r($e, true);
-    			} 
-    		}
-    	}
+                try {
+                    $log = $this->parse_row($data);
+                    if ($log) {
+                        $logs[] = $log;
+                    }
+                } catch (Exception $e) {
+                    $logs[] = "Erro ao processar linha:";
+                    $logs[] = print_r($e, true);
+                } 
+            }
+        }
     	return $logs;
     }
     
@@ -373,7 +373,7 @@ class EducacensoParser {
             }
         }
         if (!$localizacao_id) {
-            $localizacao = clsPmieducarEscolaLocalizacao(
+            $localizacao = new clsPmieducarEscolaLocalizacao(
                     null, # $cod_escola_localizacao = null,
                     null, # $ref_usuario_exc = null,
                     $this->usuario_cad, # $ref_usuario_cad = null,
