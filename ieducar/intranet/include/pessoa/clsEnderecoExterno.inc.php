@@ -70,7 +70,7 @@ class clsEnderecoExterno
    */
   function clsEnderecoExterno($idpes = FALSE, $tipo = FALSE, $idtlog = FALSE,
     $logradouro = FALSE, $numero = FALSE, $letra = FALSE, $complemento = FALSE,
-    $bairro = FALSE, $cep = FALSE, $cidade = FALSE, $sigla_uf = FALSE,
+    $bairro = FALSE, $cep = FALSE, $cidade = FALSE, $cod_ibge_uf = FALSE,
     $reside_desde = FALSE, $bloco = FALSE, $apartamento = FALSE, $andar = FALSE,
     $idpes_cad = FALSE, $idpes_rev = FALSE, $zona_localizacao = 1)
   {
@@ -96,9 +96,11 @@ class clsEnderecoExterno
     $this->cep         = $cep;
     $this->cidade      = pg_escape_string($cidade);
 
-    $objSiglaUf = new clsUf($sigla_uf);
-    if ($objPessoa->detalhe()) {
-      $this->sigla_uf = $sigla_uf;
+    $objSiglaUf = new clsUf();
+    $uf = $objSiglaUf->by_id_IBGE($cod_ibge_uf);
+
+    if ($uf) {
+      $this->sigla_uf = $uf['sigla_uf'];
     }
 
     $this->idpes_cad        = $idpes_cad ? $idpes_cad : $_SESSION['id_pessoa'];
