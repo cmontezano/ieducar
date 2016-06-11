@@ -321,7 +321,7 @@ class EducacensoFieldHelper
                41 => "curso_direitos_humanos",
                42 => "curso_genero",
                43 => "curso_direitos_crianca_adolescente",
-               44 => "curso_relacoes_etinicorraciais",
+               44 => "curso_relacoes_etnicorraciais",
                45 => "curso_outros",
                46 => "curso_nenhum"
           ),
