@@ -158,7 +158,7 @@ class clsUf
    * Retorna um array com os registros da tabela public.uf
    * @return array
    */
-  public function lista($str_nome = FALSE, $str_geom = FALSE, $int_idpais = FALSE,
+  public function lista($str_nome = FALSE, $str_geom = FALSE, $int_idpais = FALSE, $cod_ibge = null, 
     $int_limite_ini = FALSE, $int_limite_qtd = FALSE, $str_orderBy = 'sigla_uf ASC')
   {
     $whereAnd = 'WHERE ';
@@ -181,6 +181,11 @@ class clsUf
       $idpais = $this->config->app->locale->country;
       $where .= "{$whereAnd}idpais = '$idpais'";
       $whereAnd = ' AND ';
+    }
+
+    if ($cod_ibge) {
+        $where .= "{$whereAnd}cod_ibge = '$cod_ibge'";
+        $whereAnd = ' AND ';
     }
 
     if ($str_orderBy) {
@@ -243,5 +248,19 @@ class clsUf
 		}
 		return false;
 	}
+
+    public function by_id_IBGE($id_ibge) {
+        try {
+            $results = $this->lista(false, false, false, $id_ibge);
+            
+            if ($results) {
+                return $results[0];
+            }
+        } catch (Exception $e) {        
+        
+        } 
+        
+        return null;
+    }
 }
 ?>
