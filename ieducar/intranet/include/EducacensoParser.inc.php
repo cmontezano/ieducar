@@ -713,7 +713,7 @@ class EducacensoParser {
     			strlen($d['bairro']) > 40 ? substr($d['bairro'], 0, 40) : $d['bairro'], # $bairro = FALSE,
     			idFederal2int( $d['cep'] ), # $cep = FALSE,
     			$municipio_residencia ? $municipio_residencia->nome : null, # $cidade = FALSE,
-    			$municipio_residencia ? $municipio_residencia->sigla_uf : null, # $uf = FALSE,
+    			$d['_uf'], # $uf = FALSE,
     			null, # $reside_desde = FALSE,
     			null, # $bloco = FALSE,
     			null, # $apartamento = FALSE,
