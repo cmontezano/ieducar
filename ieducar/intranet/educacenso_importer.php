@@ -32,8 +32,9 @@ class indice extends clsCadastro {
         if (array_key_exists('cod_instituicao', $_POST ))
             $this->id_instituicao = $_POST ['cod_instituicao'];
         
+
         if (array_key_exists('ano_destino', $_POST)) {
-            $ano = intval($_POST['ano_destino']);
+            $ano = intval((int) $_POST['ano_destino']);
             $ano_atual = intval(date('Y'));
             $ano_max = $ano_atual + 4;
             if (($ano > $ano_max) || ($ano < $ano_atual)) {
