@@ -295,6 +295,10 @@ class clsPmieducarMatriculaTurma
         $campos .= "{$gruda}data_enturmacao";
         $valores .= "{$gruda}'{$this->data_enturmacao}'";
         $gruda = ", ";
+      } else {
+        $campos .= "{$gruda}data_enturmacao";
+        $valores .= "{$gruda}NOW()";
+        $gruda = ", ";
       }
 
       $this->sequencial_fechamento = $this->getSequencialFechamento($this->ref_cod_matricula, $this->ref_cod_turma, $this->data_enturmacao);
