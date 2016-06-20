@@ -1,30 +1,30 @@
 <?php
 
 /**
- * i-Educar - Sistema de gestão escolar
+ * i-Educar - Sistema de gestÃ£o escolar
  *
- * Copyright (C) 2006  Prefeitura Municipal de Itajaí
+ * Copyright (C) 2006  Prefeitura Municipal de ItajaÃ­
  *                     <ctima@itajai.sc.gov.br>
  *
- * Este programa é software livre; você pode redistribuí-lo e/ou modificá-lo
- * sob os termos da Licença Pública Geral GNU conforme publicada pela Free
- * Software Foundation; tanto a versão 2 da Licença, como (a seu critério)
- * qualquer versão posterior.
+ * Este programa Ã© software livre; vocÃª pode redistribuÃ­-lo e/ou modificÃ¡-lo
+ * sob os termos da LicenÃ§a PÃºblica Geral GNU conforme publicada pela Free
+ * Software Foundation; tanto a versÃ£o 2 da LicenÃ§a, como (a seu critÃ©rio)
+ * qualquer versÃ£o posterior.
  *
- * Este programa é distribuí­do na expectativa de que seja útil, porém, SEM
- * NENHUMA GARANTIA; nem mesmo a garantia implí­cita de COMERCIABILIDADE OU
- * ADEQUAÇÃO A UMA FINALIDADE ESPECÍFICA. Consulte a Licença Pública Geral
+ * Este programa Ã© distribuÃ­Â­do na expectativa de que seja Ãºtil, porÃ©m, SEM
+ * NENHUMA GARANTIA; nem mesmo a garantia implÃ­Â­cita de COMERCIABILIDADE OU
+ * ADEQUAÃ‡ÃƒO A UMA FINALIDADE ESPECÃFICA. Consulte a LicenÃ§a PÃºblica Geral
  * do GNU para mais detalhes.
  *
- * Você deve ter recebido uma cópia da Licença Pública Geral do GNU junto
- * com este programa; se não, escreva para a Free Software Foundation, Inc., no
- * endereço 59 Temple Street, Suite 330, Boston, MA 02111-1307 USA.
+ * VocÃª deve ter recebido uma cÃ³pia da LicenÃ§a PÃºblica Geral do GNU junto
+ * com este programa; se nÃ£o, escreva para a Free Software Foundation, Inc., no
+ * endereÃ§o 59 Temple Street, Suite 330, Boston, MA 02111-1307 USA.
  *
- * @author    Prefeitura Municipal de Itajaí <ctima@itajai.sc.gov.br>
+ * @author    Prefeitura Municipal de ItajaÃ­ <ctima@itajai.sc.gov.br>
  * @category  i-Educar
  * @license   @@license@@
  * @package   iEd_Pmieducar
- * @since     Arquivo disponível desde a versão 1.0.0
+ * @since     Arquivo disponÃ­vel desde a versÃ£o 1.0.0
  * @version   $Id$
  */
 
@@ -33,11 +33,11 @@ require_once 'include/pmieducar/geral.inc.php';
 /**
  * clsPmieducarEscola class.
  *
- * @author    Prefeitura Municipal de Itajaí <ctima@itajai.sc.gov.br>
+ * @author    Prefeitura Municipal de ItajaÃ­ <ctima@itajai.sc.gov.br>
  * @category  i-Educar
  * @license   @@license@@
  * @package   iEd_Pmieducar
- * @since     Classe disponível desde a versão 1.0.0
+ * @since     Classe disponÃ­vel desde a versÃ£o 1.0.0
  * @version   @@package_version@@
  */
 class clsPmieducarAluno
@@ -58,7 +58,7 @@ class clsPmieducarAluno
   var $tipo_responsavel;
 
   /**
-   * Armazena o total de resultados obtidos na última chamada ao método lista().
+   * Armazena o total de resultados obtidos na Ãºltima chamada ao mÃ©todo lista().
    * @var int
    */
   var $_total;
@@ -76,33 +76,33 @@ class clsPmieducarAluno
   var $_tabela;
 
   /**
-   * Lista separada por vírgula, com os campos que devem ser selecionados na
-   * próxima chamado ao método lista().
+   * Lista separada por vÃ­rgula, com os campos que devem ser selecionados na
+   * prÃ³xima chamado ao mÃ©todo lista().
    * @var string
    */
   var $_campos_lista;
 
   /**
-   * Lista com todos os campos da tabela separados por vírgula, padrão para
-   * seleção no método lista.
+   * Lista com todos os campos da tabela separados por vÃ­rgula, padrÃ£o para
+   * seleÃ§Ã£o no mÃ©todo lista.
    * @var string
    */
   var $_todos_campos;
 
   /**
-   * Valor que define a quantidade de registros a ser retornada pelo método lista().
+   * Valor que define a quantidade de registros a ser retornada pelo mÃ©todo lista().
    * @var int
    */
   var $_limite_quantidade;
 
   /**
-   * Define o valor de offset no retorno dos registros no método lista().
+   * Define o valor de offset no retorno dos registros no mÃ©todo lista().
    * @var int
    */
   var $_limite_offset;
 
   /**
-   * Define o campo para ser usado como padrão de ordenação no método lista().
+   * Define o campo para ser usado como padrÃ£o de ordenaÃ§Ã£o no mÃ©todo lista().
    * @var string
    */
   var $_campo_order_by;
@@ -440,7 +440,7 @@ class clsPmieducarAluno
   }
 
   /**
-   * Retorna uma lista de registros filtrados de acordo com os parâmetros.
+   * Retorna uma lista de registros filtrados de acordo com os parÃ¢metros.
    * @return array
    */
   function lista($int_cod_aluno = null, $int_ref_cod_aluno_beneficio = null,
@@ -664,7 +664,7 @@ class clsPmieducarAluno
   }
 
   /**
-   * Retorna uma lista de registros filtrados de acordo com os parâmetros.
+   * Retorna uma lista de registros filtrados de acordo com os parÃ¢metros.
    * @return array
    */
   function lista2($int_cod_aluno = NULL, $int_ref_cod_aluno_beneficio = NULL,
@@ -1107,7 +1107,7 @@ class clsPmieducarAluno
   /**
    * Se o aluno estiver cadastrado pelo Educacenso, retorna o cod_aluno.
    * @param $cod_inep int
-   * @return int se houver, null se não.
+   * @return int se houver, null se nÃ£o.
    */
   public static function id_aluno_inep ($cod_inep) {
       $db = new clsBanco();
@@ -1122,10 +1122,10 @@ class clsPmieducarAluno
   }
   
   /**
-   * Adiciona vínculo do INEP.
+   * Adiciona vÃ­nculo do INEP.
    * @param $cod_inep int
    * @param fonte str
-   * @return true se executar, false se não
+   * @return true se executar, false se nÃ£o
    */
   public function vincula_educacenso ($cod_inep, $fonte = '') {
       if (!clsPmieducarAluno::id_aluno_inep($cod_inep)) {
@@ -1139,7 +1139,7 @@ class clsPmieducarAluno
   }
 
   /**
-   * Define quais campos da tabela serão selecionados no método Lista().
+   * Define quais campos da tabela serÃ£o selecionados no mÃ©todo Lista().
    */
   function setCamposLista($str_campos)
   {
@@ -1147,7 +1147,7 @@ class clsPmieducarAluno
   }
 
   /**
-   * Define que o método Lista() deverpa retornar todos os campos da tabela.
+   * Define que o mÃ©todo Lista() deverpa retornar todos os campos da tabela.
    */
   function resetCamposLista()
   {
@@ -1155,7 +1155,7 @@ class clsPmieducarAluno
   }
 
   /**
-   * Define limites de retorno para o método Lista().
+   * Define limites de retorno para o mÃ©todo Lista().
    */
 	function setLimite( $intLimiteQtd, $intLimiteOffset = 0 )
 	{
@@ -1165,7 +1165,7 @@ class clsPmieducarAluno
 	}
 
   /**
-   * Retorna a string com o trecho da query responsável pelo limite de
+   * Retorna a string com o trecho da query responsÃ¡vel pelo limite de
    * registros retornados/afetados.
    *
    * @return string
@@ -1183,7 +1183,7 @@ class clsPmieducarAluno
   }
 
   /**
-   * Define o campo para ser utilizado como ordenação no método Lista().
+   * Define o campo para ser utilizado como ordenaÃ§Ã£o no mÃ©todo Lista().
    */
   function setOrderby($strNomeCampo)
   {
@@ -1193,7 +1193,7 @@ class clsPmieducarAluno
   }
 
   /**
-   * Retorna a string com o trecho da query responsável pela Ordenação dos
+   * Retorna a string com o trecho da query responsÃ¡vel pela OrdenaÃ§Ã£o dos
    * registros.
    *
    * @return string
@@ -1204,5 +1204,68 @@ class clsPmieducarAluno
       return " ORDER BY {$this->_campo_order_by} ";
     }
     return '';
+  }
+
+  public function getEnderecosAlunos()
+  {
+    $sql = "select *"
+         . " from cadastro.endereco_externo"
+         . " where idpes in (select ref_idpes from pmieducar.aluno);";
+
+    $db = new clsBanco();
+    $db->Consulta($sql);
+
+    while ($db->ProximoRegistro()) {
+      $enderecos[] = $db->Tupla();
+    }
+
+    return $enderecos;
+  }
+
+  public function getEnderecosComCoordenadasVazias()
+  {
+    $sql = "select *"
+         . " from cadastro.endereco_externo"
+         . " where idpes in (select ref_idpes from pmieducar.aluno)"
+         . " AND lat is null"
+         . " AND long is null;";
+
+    $db = new clsBanco();
+    $db->Consulta($sql);
+
+    while ($db->ProximoRegistro()) {
+      $enderecos[] = $db->Tupla();
+    }
+
+    return $enderecos;
+  }
+
+  public function updateCoordenadas($id, $geocodingResult)
+  {
+    $sql = "UPDATE cadastro.endereco_externo"
+         . " SET lat='" . $geocodingResult['latitude'] . "'"
+         . ", long='" . $geocodingResult['longitude'] . "'"
+         . " WHERE idpes='" . $id . "'";
+
+    $db = new clsBanco();
+    $db->Consulta($sql);
+  }
+
+  public function getEnderecosComCoordenadasPreenchidas()
+  {
+    $sql = "select *"
+         . " from cadastro.endereco_externo"
+         . " where idpes in (select ref_idpes from pmieducar.aluno)"
+         . " AND lat is not null"
+         . " AND long is not null;";
+
+    $db = new clsBanco();
+    $db->Consulta($sql);
+
+    while ($db->ProximoRegistro()) {
+      $enderecos[] = $db->Tupla();
+    }
+
+    return $enderecos;
   }
 }

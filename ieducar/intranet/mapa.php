@@ -27,11 +27,14 @@
 
 $desvio_diretorio = "";
 require_once ("include/clsBase.inc.php");
+require_once 'include/clsListagem.inc.php';
 require_once ("include/clsBanco.inc.php");
+require_once 'include/pmieducar/geral.inc.php';
+require_once 'lib/Portabilis/Messenger.php';
+$loader = require dirname(dirname(__DIR__)) . '/vendor/autoload.php';
 
 class clsIndex extends clsBase
 {
-
 	function Formular()
 	{
 		$this->SetTitulo( "{$this->_instituicao} i-Educar" );
@@ -41,16 +44,67 @@ class clsIndex extends clsBase
 	}
 }
 
-class indice
+class indice extends clsListagem
 {
 	function RenderHTML()
 	{
 		return "<div id='mapa' style='height: 800px; width: 100%'></div>";
 	}
+
+	public function getAllStudents()
+	{
+		$alunoGateway = new clsPmieducarAluno();
+		$enderecosSemCoordenadas = $alunoGateway->getEnderecosComCoordenadasVazias();
+
+		if (!$enderecosSemCoordenadas) {
+			return false;
+		}
+
+		foreach ($enderecosSemCoordenadas as $endereco) {
+			$geocoder = new \Geocoder\Geocoder();
+			$adapter  = new \Geocoder\HttpAdapter\CurlHttpAdapter();
+			
+			$geocoder->registerProviders(array(
+		    	new \Geocoder\Provider\GoogleMapsProvider($adapter)
+			));
+
+			try {
+			    $geotools = new \League\Geotools\Geotools();
+			    $result = $geotools->batch($geocoder)
+			    				   ->geocode(array($endereco['logradouro'] . ', ' . $endereco['numero'] . ' ' . $endereco['cidade']))
+			    				   ->parallel();
+			} catch (\Exception $e) {
+			    die($e->getMessage());
+			}
+
+			if (empty($result[0]['latitude']) && empty($result[0]['longitude'])) {
+				continue;
+			}
+
+			$updateResult = $alunoGateway->updateCoordenadas($endereco['idpes'], $result[0]);
+		}
+
+		$enderecosComCoordenadas = $alunoGateway->getEnderecosComCoordenadasPreenchidas();
+		return $enderecosComCoordenadas;
+	}
+
+	public function getAllStudentsWithCoordinates()
+	{
+		$alunoGateway = new clsPmieducarAluno();
+		$enderecosComCoordenadas = $alunoGateway->getEnderecosComCoordenadasPreenchidas();
+
+		$filePath = dirname(__DIR__) . '/map/pontos.json';
+		$handle = fopen($filePath, "w");
+		fwrite($handle, json_encode($enderecosComCoordenadas));
+		fclose($handle);
+
+		return json_encode($enderecosComCoordenadas);
+	}
 }
 
 $pagina = new clsIndex();
 $miolo = new indice();
+$students = $miolo->getAllStudentsWithCoordinates();
 
 $pagina->addForm($miolo);
 $pagina->MakeAll();
@@ -92,28 +146,28 @@ $pagina->MakeAll();
 
 	function carregarPontos() {
 		
-		$.getJSON('https://raw.githubusercontent.com/rodolfoprr/GoogleMapsAPIv3MapaPersonalizado/master/js/pontos.json', function(pontos) {
+		$.getJSON('../map/pontos.json', function(pontos) {
 			
 			var latlngbounds = new google.maps.LatLngBounds();
 			
 			$.each(pontos, function(index, ponto) {
 				
 				var marker = new google.maps.Marker({
-					position: new google.maps.LatLng(ponto.Latitude, ponto.Longitude),
+					position: new google.maps.LatLng(ponto.lat, ponto.long),
 					title: "Meu ponto personalizado! :-D",
 					icon: 'https://raw.githubusercontent.com/rodolfoprr/GoogleMapsAPIv3MapaPersonalizado/master/img/marcador.png'
 				});
 				
 				var myOptions = {
-					content: "<p>" + ponto.Descricao + "</p>",
+					content: "<p>" + ponto.logradouro + ", " + ponto.numero + "</p>",
 					pixelOffset: new google.maps.Size(-150, 0)
 	        	};
 
-				infoBox[ponto.Id] = new InfoBox(myOptions);
-				infoBox[ponto.Id].marker = marker;
+				infoBox[ponto.idpes] = new InfoBox(myOptions);
+				infoBox[ponto.idpes].marker = marker;
 				
-				infoBox[ponto.Id].listener = google.maps.event.addListener(marker, 'click', function (e) {
-					abrirInfoBox(ponto.Id, marker);
+				infoBox[ponto.idpes].listener = google.maps.event.addListener(marker, 'click', function (e) {
+					abrirInfoBox(ponto.idpes, marker);
 				});
 				
 				markers.push(marker);
